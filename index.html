@@ -1,51 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js"></script>
-
-<script>
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  };
-  firebase.initializeApp(firebaseConfig);
-</script>
   <meta charset="UTF-8">
-  <title>HACE Store - Online Ordering</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <title>HACE Store</title>
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f0f0f0;
-      padding: 20px;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
       max-width: 600px;
       margin: auto;
+      padding: 20px;
     }
     h1 {
       text-align: center;
-      color: #333;
     }
     .product {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      margin: 8px 0;
+      margin: 10px 0;
       background: #fff;
       padding: 10px;
       border-radius: 5px;
     }
-    .product input {
+    input[type="number"] {
       width: 50px;
     }
     #cart {
-      background: white;
+      background: #fff;
       padding: 10px;
       margin-top: 20px;
       border-radius: 5px;
@@ -55,10 +36,10 @@
       background-color: #4CAF50;
       color: white;
       border: none;
-      padding: 8px 12px;
-      margin-top: 10px;
+      padding: 10px 16px;
+      border-radius: 5px;
       cursor: pointer;
-      border-radius: 4px;
+      margin-top: 10px;
     }
     button:hover {
       background-color: #45a049;
@@ -88,14 +69,13 @@
   <h1>Welcome to HACE Store!</h1>
 
   <div id="product-list"></div>
-
   <div id="cart"></div>
   <div id="total">Total: P0.00</div>
 
   <form action="https://formspree.io/f/xqalvnrn" method="POST" onsubmit="return prepareOrder()">
     <input type="text" name="name" placeholder="Your Name" required>
     <input type="email" name="email" placeholder="Your Email" required>
-    <textarea name="message" id="message" placeholder="Order Details" required></textarea>
+    <textarea name="message" id="message" readonly required></textarea>
     <button type="submit">Submit Order</button>
   </form>
 
@@ -169,45 +149,6 @@
       messageBox.value = summary;
       return true;
     }
-
-    <button onclick="signIn()">Sign in with Google</button>
-<div id="user-info"></div>
-
-<script>
-  const auth = firebase.auth();
-
-  function signIn() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider).then(result => {
-      const user = result.user;
-      document.getElementById("user-info").innerText = `Signed in as ${user.email}`;
-    });
-  }
-    <button onclick="submitOrder()">Submit Order</button>
-
-<script>
-  const db = firebase.firestore();
-
-  function submitOrder() {
-    const user = auth.currentUser;
-    if (!user) {
-      alert("Please sign in first.");
-      return;
-    }
-
-    const order = {
-      email: user.email,
-      name: user.displayName,
-      items: cart, // your cart object
-      timestamp: new Date()
-    };
-
-    db.collection("orders").add(order).then(() => {
-      alert("Order submitted!");
-    });
-  }
-</script>
-</script>
   </script>
 
 </body>
