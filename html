@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HACE Store - Online Ordering</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f0f0;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .product {
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 0;
+      background: #fff;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .product input {
+      width: 50px;
+    }
+    #cart {
+      background: white;
+      padding: 10px;
+      margin-top: 20px;
+      border-radius: 5px;
+      white-space: pre-wrap;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #total {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Welcome to HACE Store!</h1>
+
+  <div id="product-list"></div>
+
+  <div id="cart"></div>
+  <div id="total">Total: P0.00</div>
+
+  <button onclick="submitOrder()">Submit Order</button>
+  <button onclick="clearCart()" style="background-color:#f44336;">Clear Cart</button>
+
+  <script>
+    const PRODUCTS = {
+      "Munchskin": 3.50,
+      "spambread": 2.75,
+      "Sandwich": 5.00,
+      "Cake": 4.25,
+      "Juice": 3.00
+    };
+
+    const cart = {};
+
+    const productList = document.getElementById("product-list");
+    const cartDisplay = document.getElementById("cart");
+    const totalLabel = document.getElementById("total");
+
+    for (let product in PRODUCTS) {
+      const div = document.createElement("div");
+      div.className = "product";
+
+      div.innerHTML = `
+        <span>${product} - P${PRODUCTS[product].toFixed(2)}</span>
+        <input type="number" min="1" value="1" id="qty-${product}">
+        <button onclick="addToCart('${product}')">Add to Cart</button>
+      `;
+      productList.appendChild(div);
+    }
+
+    function addToCart(product) {
+      const qtyInput = document.getElementById(`qty-${product}`);
+      const qty = parseInt(qtyInput.value);
+      if (qty <= 0 || isNaN(qty)) {
+        alert("Please enter a quantity greater than 0.");
+        return;
+      }
+
+      cart[product] = (cart[product] || 0) + qty;
+      qtyInput.value = 1;
+      updateCartDisplay();
+    }
+
+    function updateCartDisplay() {
+      cartDisplay.innerHTML = "";
+      let total = 0;
+      for (let product in cart) {
+        const qty = cart[product];
+        const price = PRODUCTS[product];
+        const subtotal = price * qty;
+        total += subtotal;
+        cartDisplay.innerHTML += `${product} x ${qty} = P${subtotal.toFixed(2)}\n`;
+      }
+      totalLabel.textContent = `Total: P${total.toFixed(2)}`;
+    }
+
+    function submitOrder() {
+      if (Object.keys(cart).length === 0) {
+        alert("Your cart is empty.");
+        return;
+      }
+
+      let summary = "";
+      let total = 0;
+      for (let product in cart) {
+        const qty = cart[product];
+        const price = PRODUCTS[product];
+        const subtotal = price * qty;
+        total += subtotal;
+        summary += `${product} x ${qty} = P${subtotal.toFixed(2)}\n`;
+      }
+      summary += `\nTotal: P${total.toFixed(2)}`;
+      alert("Order Summary:\n\n" + summary);
+
+      clearCart();
+    }
+
+    function clearCart() {
+      for (let product in cart) {
+        delete cart[product];
+      }
+      updateCartDisplay();
+    }
+  </script>
+
+</body>
+</html>
